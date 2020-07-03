@@ -1,8 +1,21 @@
 import Vue from 'vue'
-import App from './App.vue'
+import home from './components/home.vue'
+import router from './router/index.js'
+import store from './store/store.js'
+import axios from 'axios'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
-Vue.config.productionTip = false
-
+Vue.use(ElementUI)
+Vue.prototype.$axios = axios
 new Vue({
-  render: h => h(App),
-}).$mount('#app')
+	el: '#main',
+	router,
+	store,
+	components: {
+		home
+	},
+	template: "<home></home>"
+})
+
+Vue.prototype.$audio = document.getElementsByTagName('audio')[0]
