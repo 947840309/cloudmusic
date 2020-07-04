@@ -8,7 +8,11 @@ var store = new Vuex.Store({
 		num: 1,
 		sta: 'left',
 		lastop: 'find',
-		src: ''
+		src: '',
+		drawer : false,
+		song : '',
+		audiostate: 'stop',
+		showseek : false 
 	},
 	mutations: {
 		changenum (state,data) {
@@ -22,6 +26,16 @@ var store = new Vuex.Store({
 		},
 		changesrc (state,src) {
 			state.src =  `https://music.163.com/song/media/outer/url?id=${src}`
+			state.drawer = true
+		},
+		changesong (state,song){
+			state.song = song[0]
+		},
+		changestate (state, data) {
+			state.audiostate = data
+		},
+		changeshowseek (state){
+			state.showseek = !state.showseek
 		}
 	}
 })
