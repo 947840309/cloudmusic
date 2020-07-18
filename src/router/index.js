@@ -5,6 +5,7 @@ import me from '../components/me.vue'
 import find from '../components/find.vue'
 import village from '../components/village.vue'
 import mv from '../components/mv.vue'
+import login from '../components/login.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,12 @@ var router = new VueRouter({
 		name: 'mv',
 		components: {
 			option: mv
+		}
+	},{
+		path: '/login',
+		name: 'login',
+		components:{
+			option: login
 		}
 	}]
 })

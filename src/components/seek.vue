@@ -9,7 +9,7 @@
 				</div>
 			</div>
 			<ul class="infinite-list" v-infinite-scroll='' style="overflow: auto;">
-				<li :key='itme.id' v-for="itme in songarr" @click="music(itme.id)">
+				<li :key='itme.id' v-for="itme in songarr" @click="music(itme)">
 					<div>
 						<h3>{{itme.name}}</h3>
 						<span>{{itme.artists[0].name}}</span>
@@ -36,26 +36,23 @@
 		watch: {
 			data(val){
 				var self = this
-				this.$axios.get(`http://musicapi.leanapp.cn/search?keywords=${val}&limit=30`).then((data) => {
-					self.songarr = data.data.result.songs
-				})
+				if(val !== ''){
+					this.$axios.get(`https://musicapi.leanapp.cn/search?keywords=${val}&limit=30`).then((data) => {
+						self.songarr = data.data.result.songs
+					})
+				}
 			}
 		},
 		methods: {
 			music (data) {
-				this.$store.commit('changesrc',data)
-				this.$audio.load()
-				this.$axios.get(`http://musicapi.leanapp.cn/song/detail?ids=${data}`).then((d) => {
-									this.$store.commit('changesong',d.data.songs)
-				})
-				this.$store.commit('changeshowseek')
-				setTimeout(()=>{
-					this.$audio.play()
-					this.$store.commit('changestate','play')
-				},1000)
+				this.$store.state.playsonglist = [data]
+				this.$store.commit('changesrc',data.id)
+				this.$store.dispatch('playsong',data.id)
+				this.$store.commit('changeshow','showmusic')
+				this.backhome()
 			},
 			backhome () {
-				this.$store.commit('changeshowseek')
+				this.$store.commit('changeshow','showseek')
 			}
 		}
 	}
@@ -64,3 +61,4 @@
 <style lang="less">
 	@import url("../css/seek.less");
 </style>
+

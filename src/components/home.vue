@@ -16,10 +16,11 @@
 		<transition name="seek">
 			<router-view name="seek"></router-view>
 		</transition>
+		<router-view name="login"></router-view>
 		<audio :src="src"></audio>
-		
+		<!-- 底部音乐播放控件 -->
 		<el-drawer class='drawer1' :visible.sync="drawer" direction="btt" :show-close="false" :modal="false" :wrapperClosable="false" size="100%" :withHeader="false">
-			<div class="song-wrapper" :style="bagurl">
+			<div class="song-wrapper" :style="bagurl" @click="music">
 				<img :src="song.al.picUrl" alt="">
 				<div>
 					<h4>{{song.al.name}}</h4>
@@ -29,15 +30,19 @@
 				<button class="play iconfont" @click="play" :class="icon" :state="state"></button>
 			</div>
 		</el-drawer>
-		
+		<!-- 左侧菜单控件 -->
 		<el-drawer :show-close="false" direction="ltr" :visible.sync="showmenu" size="80%" :withHeader="false">
 			<div class="mymenu">
 				<mymenu></mymenu>
 			</div>
 		</el-drawer>
-		
+		<!-- 右侧搜索 -->
 		<el-drawer :show-close="false" direction="btt" :visible.sync="showseek" :wrapperClosable='false' size="100%" :withHeader="false">
 			<seek></seek>
+		</el-drawer>
+		<!-- 播放页面 -->
+		<el-drawer :show-close="false" direction="btt" :visible.sync="showmusic" :wrapperClosable='false' size="100%" :withHeader="false">
+			<music></music>
 		</el-drawer>
 	</div>
 </template>
@@ -45,12 +50,13 @@
 <script>
 	import blurImg from '../gaussFun.js'
 	import mymenu from './menu.vue'
-	import seek from '../components/seek.vue'
+	import seek from './seek.vue'
+	import music from './music.vue'
 	export default {
 		beforeCreate(){
 				var img = document.createElement('img'),
 					me = this
-				img.src = '/img/12.05d659a4.jpg'
+				img.src = '/img/12.6568f576.jpg'
 				img.onload = function(){
 					me.bagurl = {
 							backgroundImage: `url(${blurImg(img)})`
@@ -97,21 +103,27 @@
 			changenum (data) {
 				this.$store.commit('changenum',data)
 			},
-			play () {
+			play (e) {
+				e.stopPropagation()
 				if(!this.$audio.paused){
 					this.$audio.pause()
 					this.$store.commit('changestate','stop')
+					window.$clean(window.$timestate)
 				}else{
 					this.$audio.play()
 					this.$store.commit('changestate','play')
+					window.$gettime()
 				}
 			},
 			showm (e) {
 				if(e.path[0].className == 'iconfont icon-sousuo'){
-					this.$store.commit('changeshowseek')
+					this.$store.commit('changeshow','showseek')
 				}else if(e.path[0].className == 'iconfont icon-caidan'){
 					this.showmenu = !this.showmenu
 				}
+			},
+			music () {
+				this.$store.commit('changeshow','showmusic')
 			}
 		},
 		computed:{
@@ -141,7 +153,7 @@
 			},
 			state() {
 				if(this.$store.state.audiostate == 'stop'){
-					this.icon = 'icon-icon_zanting'
+					this.icon = 'icon-bofang'
 				}else if (this.$store.state.audiostate == 'play'){
 					this.icon = 'icon-zanting'
 				}
@@ -149,11 +161,15 @@
 			},
 			showseek () {
 				return this.$store.state.showseek
+			},
+			showmusic () {
+				return this.$store.state.showmusic
 			}
 		},
 		components: {
 			mymenu,
-			seek
+			seek,
+			music
 		}
 	}
 </script>

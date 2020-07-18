@@ -1,0 +1,53 @@
+@import url('./commonality.css');
+
+.log-wrapper {
+	background-color: red;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1900;
+}
+.logo {
+	margin: 100px auto 0;
+	width: 80px;
+	height: 80px;
+	overflow: hidden;
+	border-radius: 50%;
+	img {
+		width: 80px;
+		height: 80px;
+	}
+}
+.login {
+	margin-top: 100px;
+	width: 100%;
+	input {
+		display: block;
+		margin: 5px auto 0;
+		height: 30px;
+		width: 180px;
+		outline-style: none;
+		border: 0px;
+		text-align: center;
+		border-radius: 15px;
+	}
+	button{
+		display: block;
+		margin: 5px auto 0 !important;
+		height: 30px;
+		padding: 2px 15px;
+		border-radius: 15px;
+		touch-action: none !important;
+		-webkit-tap-highlight-color:transparent;
+		&:nth-of-type(1){
+			border: 0px !important;
+			color: red !important;
+		}
+		&:nth-of-type(2){
+			border: 1px solid rgba(255,255,255,.3) !important;
+			background-color: red !important;
+			color: #fff !important;
+		}
+	}
+}
