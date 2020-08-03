@@ -38,7 +38,6 @@
 <script>
 import blurImg from '../gaussFun.js';
 import musicdial from './musicdial.vue';
-
 function newimg(src, obj) {
 	var img = document.createElement('img');
 	img.src = src;

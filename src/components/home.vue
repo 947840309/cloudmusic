@@ -20,7 +20,7 @@
 		<audio :src="src"></audio>
 		<!-- 底部音乐播放控件 -->
 		<el-drawer class='drawer1' :visible.sync="drawer" direction="btt" :show-close="false" :modal="false" :wrapperClosable="false" size="100%" :withHeader="false">
-			<div class="song-wrapper" :style="bagurl" @click="music">
+			<div class="song-wrapper" :style="{backgroundImage: gsbj}" @click="music">
 				<img :src="song.al.picUrl" alt="">
 				<div>
 					<h4>{{song.al.name}}</h4>
@@ -48,21 +48,21 @@
 </template>
 
 <script>
-	import blurImg from '../gaussFun.js'
 	import mymenu from './menu.vue'
 	import seek from './seek.vue'
 	import music from './music.vue'
+	import blurImg from '../gaussFun.js'
+	
 	export default {
 		beforeCreate(){
-				var img = document.createElement('img'),
-					me = this
-				img.src = '/img/12.6568f576.jpg'
-				img.onload = function(){
-					me.bagurl = {
-							backgroundImage: `url(${blurImg(img)})`
-					}
-				}
-			},
+			var img = document.createElement('img'),
+				me = this
+			img.src = '/img/12.6568f576.jpg'
+			img.onload = function(){
+				var bg = blurImg(img)
+				me.$store.commit("changegs",bg)
+			}
+		},
 		data: function() {
 			return {
 				arr: [{
@@ -94,7 +94,6 @@
 						num: 4
 					}
 				],
-				bagurl : '',
 				icon : 'icon-zanting',
 				showmenu : false,
 			}
@@ -164,6 +163,9 @@
 			},
 			showmusic () {
 				return this.$store.state.showmusic
+			},
+			gsbj(){
+				return `url(${this.$store.state.gsbj})`
 			}
 		},
 		components: {

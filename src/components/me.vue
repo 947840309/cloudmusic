@@ -60,8 +60,8 @@
 				</div>
 				<div class="osonglist">
 					<ul v-show="changelist">
-						<li v-for="itme in mysongarr">
-							<img :src="itme.coverImgUrl" alt="" />
+						<li v-for="itme in mysongarr" @click="getsonglist(itme)">
+							<img :src="itme.coverImgUrl+'?param=200y200'" alt="" />
 							<p>
 								<span>{{itme.name}}</span>
 								<span>{{itme.trackCount}}首</span>
@@ -69,8 +69,8 @@
 						</li>
 					</ul>
 					<ul v-show="!changelist">
-						<li v-for="itme in nomysongarr">
-							<img :src="itme.coverImgUrl" alt="" />
+						<li v-for="itme in nomysongarr" @click="getsonglist(itme)">
+							<img :src="itme.coverImgUrl+'?param=200y200'" alt="" />
 							<p>
 								<span>{{itme.name}}</span>
 								<span>{{itme.trackCount}}首</span>
@@ -80,10 +80,19 @@
 				</div>
 			</div>
 		</template>
+		<template>
+			<el-drawer :show-close='false' direction='btt' :visible.sync='showlist' :modal='false' :wrapperClosable='false' size='100%' :withHeader='false'>
+				<songlist :songlistid="listid" :listname="listname" :description="description" :songbg="songbg" :playCount="playCount" :songnumber="songnumber"></songlist>
+			</el-drawer>
+		</template>
+		<br>
+		<br>
 	</div>
 </template>
 
 <script>
+import songlist from './songlist.vue'
+
 export default {
 	data() {
 		return {
@@ -112,6 +121,12 @@ export default {
 			user: '',
 			userid: '',
 			changelist: true,
+			listid: '',
+			listname: '',
+			description: '',
+			songnumber: '',
+			songbg: '',
+			playCount: ''
 		};
 	},
 	computed: {
@@ -150,6 +165,9 @@ export default {
 				return false
 			})
 			return arr
+		},
+		showlist() {
+			return this.$store.state.showlist
 		}
 	},
 	methods: {
@@ -157,11 +175,36 @@ export default {
 			if(value == 'sr'){
 				if(this.$store.state.opensr) return;
 				this.$store.commit('changesr')
+			}else{
+				if(value == 'like'){
+					if(this.userid == ''){
+						this.$message({
+							message: '该功能需要登录！！',
+							duration: 2000
+						})
+						return
+					}
+					this.listid = this.$store.state.usersonglist[0].id
+					this.songnumber = this.$store.state.usersonglist[0].trackCount
+					this.songbg = this.$store.state.usersonglist[0].coverImgUrl + '?param=200y200'
+					this.playCount = this.$store.state.usersonglist[0].playCount
+				}else{
+					this.listid = value.id
+					this.songnumber = value.trackCount
+					this.songbg = value.coverImgUrl + '?param=200y200'
+					this.playCount = value.playCount
+				}
+				this.listname = value.name
+				this.description = value.description
+				this.$store.commit('changelist')
 			}
 		},
 		listchange() {
 			this.changelist = !this.changelist;
 		}
+	},
+	components:{
+		songlist
 	}
 };
 </script>

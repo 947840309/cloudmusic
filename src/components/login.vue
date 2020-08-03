@@ -45,11 +45,11 @@
 						text: "登录中...",
 						target: '.log-wrapper'
 					})
-					this.$axios.post('http://music.happydouble.xyz/login/cellphone',{
+					this.$axios.post('http://api.happydouble.xyz/login/cellphone',{
 						phone: this.phone,
 						password: this.password
 					}).then((data) => {
-							this.$axios.get(`http://music.happydouble.xyz/user/detail?uid=${data.data.account.id}`).then((yes) => {
+							this.$axios.get(`http://api.happydouble.xyz/user/detail?uid=${data.data.account.id}`).then((yes) => {
 							this.$store.commit('userdetail',yes)
 							sessionStorage.detail = JSON.stringify(yes)//用户详细信息
 						},(err) => {

@@ -22,7 +22,9 @@ var store = new Vuex.Store({
 		user: '',			//登录后用户的数据
 		detail: '',      //用户细节
 		usersonglist: '',  //用户歌单列表
-		opensr: false
+		opensr: false,    //私人推荐是否开启
+		gsbj: '',    //高斯模糊的背景
+		showlist: false, //歌单列表的显示
 	},
 	mutations: {
 		changenum(state,data) {  //轮播图切换方式
@@ -63,9 +65,10 @@ var store = new Vuex.Store({
 		ytime(state,time) {
 			state.songTime = time
 		},
-		changesonglist(state,list){  //传入播放列表
-			state.playsonglist = list
-			this.commit('changesongindex',' ')
+		changesonglist(state,data){  //传入播放列表
+			state.playsonglist = data[0]
+			var index = data[1] || ''
+			this.commit('changesongindex',index)
 		},
 		changesongindex(state,data){
 			if(data === 'next'){
@@ -96,12 +99,18 @@ var store = new Vuex.Store({
 			if(state.opensr){
 				this.dispatch('getsuiji')
 			}
+		},
+		changegs(state,gs){  //高斯模糊后的背景
+			state.gsbj = gs
+		},
+		changelist(state){		//歌单列表的显示
+			state.showlist = !state.showlist
 		}
 	},
 	actions:{
 		getsuiji(state){  //获取随机播放音乐的ID
 			var d = new Date
-			Vue.prototype.$axios.get(`http://music.happydouble.xyz/personal_fm?data=${d.getTime()}`).then((d) => {
+			Vue.prototype.$axios.get(`http://api.happydouble.xyz/personal_fm?data=${d.getTime()}`).then((d) => {
 				state.commit('changesrc',d.data.data[0].id)
 				state.dispatch('playsong',d.data.data[0].id)
 			}).catch((err)=> {
@@ -110,7 +119,7 @@ var store = new Vuex.Store({
 			})
 		},
 		playsong(state,id){   //播放音乐
-			Vue.prototype.$axios.get(`http://music.happydouble.xyz/song/detail?ids=${id}`).then((d) => {
+			Vue.prototype.$axios.get(`http://api.happydouble.xyz/song/detail?ids=${id}`).then((d) => {
 								state.commit('changesong',d.data.songs)
 			})
 			Vue.prototype.$audio.load()
@@ -122,7 +131,7 @@ var store = new Vuex.Store({
 			}
 		},
 		usersong(state,id){  //获取用户歌单列表
-			Vue.prototype.$axios.get(`http://music.happydouble.xyz/user/playlist?uid=${id}`).then((d) => {
+			Vue.prototype.$axios.get(`http://api.happydouble.xyz/user/playlist?uid=${id}`).then((d) => {
 				state.commit('usersongarr',d)
 			})
 		}

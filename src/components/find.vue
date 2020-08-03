@@ -122,7 +122,7 @@
 			var songs = '' //获取的推荐音乐全列表
 			//获取首页轮播图
 			if(!sessionStorage.banner){
-				this.$axios.get(`http://music.happydouble.xyz/banner`).then((data) => {
+				this.$axios.get(`http://api.happydouble.xyz/banner`).then((data) => {
 					this.banner = data.data.banners
 					sessionStorage.banner = JSON.stringify(this.banner)
 				})
@@ -131,7 +131,7 @@
 			}
 			//获取推荐歌单列表
 			if(!sessionStorage.result){
-				this.$axios.get(`http://music.happydouble.xyz/personalized?limit=10`).then((data) => {
+				this.$axios.get(`http://api.happydouble.xyz/personalized?limit=10`).then((data) => {
 					this.regedan = data.data.result
 					sessionStorage.regedan = JSON.stringify(this.regedan)
 				})
@@ -140,7 +140,7 @@
 			}
 			//获取推荐音乐
 			if(!sessionStorage.newsongs){
-				this.$axios.get(`http://music.happydouble.xyz/top/song?type=0`).then((data) => {
+				this.$axios.get(`http://api.happydouble.xyz/top/song?type=0`).then((data) => {
 					songs = data.data.data
 					sessionStorage.newsongs = JSON.stringify(songs)
 					getsongs(this)
@@ -199,7 +199,8 @@
 				this.$store.dispatch('playsong', id.id)
 			},
 			newall(arr){  //全部播放
-				this.$store.commit('changesonglist',arr)
+				console.log(arr)
+				this.$store.commit('changesonglist',[arr])
 			}
 		}
 	}

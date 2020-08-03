@@ -1,10 +1,11 @@
 <template>
-	<h1>这是云村页面</h1>
+	<div>
+		<h1>云村页面</h1>
+	</div>
 </template>
 
 <script>
 	export default {
-		
 	}
 </script>
 

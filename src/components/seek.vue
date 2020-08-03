@@ -37,7 +37,7 @@
 			data(val){
 				var self = this
 				if(val !== ''){
-					this.$axios.get(`https://musicapi.leanapp.cn/search?keywords=${val}&limit=30`).then((data) => {
+					this.$axios.get(`http://api.happydouble.xyz/search?keywords=${val}&limit=40`).then((data) => {
 						self.songarr = data.data.result.songs
 					})
 				}
