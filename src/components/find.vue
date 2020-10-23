@@ -32,7 +32,7 @@
 					<span>查看更多</span>
 				</div>
 				<ul v-infinite-scroll style="overflow:auto" :style="{height:h}">
-					<li v-for="itme in regedan" :key="">
+					<li v-for="itme in regedan" :key="" @click="getlist(itme)">
 						<img :src="itme.picUrl+'?param=200y200'" alt="">
 						<span>{{itme.name}}</span>
 					</li>
@@ -63,6 +63,11 @@
 					</el-carousel>
 				</div>
 			</li>
+			<template>
+				<el-drawer :show-close='false' direction='btt' :visible.sync='showlistF' :modal='false' :wrapperClosable='false' size='100%' :withHeader='false'>
+					<songlist :songlistid="listid" :listname="listname" :description="description" :songbg="songbg" :playCount="playCount" :songnumber="songnumber"></songlist>
+				</el-drawer>
+			</template>
 			<br>
 			<br>
 			<br>
@@ -73,12 +78,19 @@
 </template>
 
 <script>
+	import songlist from './songlist.vue'
 	function suijishu (num) {
 		return Math.floor((Math.random()*num) - 1 )
 	}
 	export default {
 		data() {
 			return {
+				listid: '',
+				listname: '',
+				description: '',
+				songbg: '',
+				playCount: '',
+				songnumber: '',
 				banner: [],
 				regedan: [],
 				newsong: [],
@@ -201,6 +213,23 @@
 			newall(arr){  //全部播放
 				console.log(arr)
 				this.$store.commit('changesonglist',[arr])
+			},
+			getlist(itme){
+				this.listid = itme.id
+				this.listname = itme.name
+				this.songbg = itme.picUrl
+				this.description = itme.copywriter
+				this.playCount = itme.playCount
+				this.songnumber = null
+				this.$store.commit('changelistF')
+			}
+		},
+		components:{
+			songlist
+		},
+		computed:{
+			showlistF(){
+				return this.$store.state.showlistF
 			}
 		}
 	}

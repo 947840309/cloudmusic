@@ -140,7 +140,7 @@ export default {
 				};
 			}
 			return {
-				name: this.$store.state.song.al.name,
+				name: this.$store.state.song.name,
 				singer: this.$store.state.song.ar[0].name
 			};
 		},

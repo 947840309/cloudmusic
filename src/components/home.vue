@@ -23,7 +23,7 @@
 			<div class="song-wrapper" :style="{backgroundImage: gsbj}" @click="music">
 				<img :src="song.al.picUrl" alt="">
 				<div>
-					<h4>{{song.al.name}}</h4>
+					<h4>{{song.name}}</h4>
 					<span>{{song.ar[0].name}}</span>
 				</div>
 				<button class="list iconfont icon-liebiao"></button>

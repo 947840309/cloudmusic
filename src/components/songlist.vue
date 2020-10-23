@@ -43,7 +43,7 @@
 					</p>
 				</div>
 			</li>
-			<li class="music" v-for="(itme,i) in mulist.data.playlist.tracks" @click="playmusic(i)">
+			<li class="music" v-for="(itme,i) in mulist.data.playlist.tracks" @click="playmusic(i)" :key="i">
 				<span class="oindex">{{i+1}}</span>
 				<p class="music-name">
 					<span class="song-title">{{itme.name}}</span>
@@ -76,13 +76,17 @@
 					backgroundImage:  `url(${this.$store.state.gsbj})`
 				},
 				songid:[],
-				index: 20
+				index: 0
 			}
 		},
 		watch:{
 			songlistid(){
+				var cookie = ''
+				if(this.$store.state.user){
+					cookie = this.$store.state.user.data.cookie
+				}
 				this.$axios({  //第一次获取后监测歌单ID变化 如有变化就请求数据
-					url: `http://api.happydouble.xyz/playlist/detail/?id=${this.songlistid}&cookie=${this.$store.state.user.data.cookie}`,
+					url: `http://api.happydouble.xyz/playlist/detail/?id=${this.songlistid}&cookie=${cookie}`,
 					method: 'get'
 				}).then((data) => {
 					this.mulist = data
@@ -91,8 +95,12 @@
 			}
 		},
 		created(){  //第一次显示歌单页面获取数据
+			var cookie = ''
+			if(this.$store.state.user){
+				cookie = this.$store.state.user.data.cookie
+			}
 			this.$axios({
-				url: `http://api.happydouble.xyz/playlist/detail/?id=${this.songlistid}&cookie=${this.$store.state.user.data.cookie}`,
+				url: `http://api.happydouble.xyz/playlist/detail/?id=${this.songlistid}&cookie=${cookie}`,
 				method: 'get'
 			}).then((data) => {
 				this.mulist = data
@@ -130,15 +138,18 @@
 				this.$store.commit('changesonglist',[this.songid,index])
 			},
 			goBack(){
-				this.index = 20
-				this.$store.commit('changelist')
+				if(this.$store.state.showlistF){
+					this.$store.commit('changelistF')
+				}else{
+					this.$store.commit('changelist')
+				}
 			},
 			load(){
 				var n = this.index,
 					arr = [],
 					num = 0,
 					id = ''
-				if(this.$store.state.showlist){
+				if(this.$store.state.showlist || this.$store.state.showlistF){
 					if(n >= this.songid.length){
 						return
 					}else{

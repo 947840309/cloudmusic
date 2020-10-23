@@ -24,7 +24,8 @@ var store = new Vuex.Store({
 		usersonglist: '',  //用户歌单列表
 		opensr: false,    //私人推荐是否开启
 		gsbj: '',    //高斯模糊的背景
-		showlist: false, //歌单列表的显示
+		showlist: false, //歌单列表的显示(用户页面的歌单列表)
+		showlistF: false //发现页面的歌单列表
 	},
 	mutations: {
 		changenum(state,data) {  //轮播图切换方式
@@ -67,7 +68,7 @@ var store = new Vuex.Store({
 		},
 		changesonglist(state,data){  //传入播放列表
 			state.playsonglist = data[0]
-			var index = data[1] || ''
+			var index = data[1] == undefined ? 0 : data[1]
 			this.commit('changesongindex',index)
 		},
 		changesongindex(state,data){
@@ -75,6 +76,8 @@ var store = new Vuex.Store({
 				state.songindex += 1
 			}else if(data === 'last'){
 				state.songindex -= 1
+			}else{
+				state.songindex = data
 			}
 			if(state.songindex > state.playsonglist.length - 1){
 				state.songindex = 0
@@ -105,6 +108,9 @@ var store = new Vuex.Store({
 		},
 		changelist(state){		//歌单列表的显示
 			state.showlist = !state.showlist
+		},
+		changelistF(state){		//歌单列表的显示
+			state.showlistF = !state.showlistF
 		}
 	},
 	actions:{
